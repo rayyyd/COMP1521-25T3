@@ -8,21 +8,14 @@ int main(void) {
     printf("Enter a number: ");
     scanf("%d", &x);
 
-    // if ( > SQUARE_MAX) {
-    //     printf("square too bixg for 32 bits\n");
-    // } else {
-    //     y = x * x;
-    //     printf("%d\n", y);
-    // }
-
-    if (x <= SQUARE_MAX) goto if_end;
+    // if (x > SQUARE_MAX) {
+    // oppoisition condtion goto end.
+    if (x <= SQUARE_MAX) goto if__else;
     printf("square too big for 32 bits\n");
-    goto else_end;
-
-if_end:  // where else begins, or where "if" ends.
+    goto epilogue;
+if__else:
     y = x * x;
     printf("%d\n", y);
-else_end:
-
+epilogue:
     return 0;
 }

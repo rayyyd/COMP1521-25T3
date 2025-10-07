@@ -1,50 +1,53 @@
 	.text
-# your code goes here
-
+# where your program (code) goes
 SQUARE_MAX = 46340
 
 main:
         # $t0 = x, $t1 = y
 
-        # printf
-        li	$v0, 4
-        la	$a0, enter_a_num
+        #printf("enter a number: ")
+
+        li	$v0, 4            #load integer
+        la	$a0, enter        # load address
         syscall
 
-        #scanf
+        #scanf("%d", &x)
         li	$v0, 5
         syscall
-        # output of this scanf is in $v0
+        # output of scanf is in $v0.
         move	$t0, $v0
 
-        # if statement   > (gt)  ->   <= (le)
+        # if statements
+        # >   --> greater than (gt), opp <=   --> less equal (le)
         ble     $t0, SQUARE_MAX, main__else
 
-        #print too big
         li	$v0, 4
-        la	$a0, square_too_big
+        la	$a0, too_big
         syscall
-
-        b	main__else_end
-main__else:
-        mul	$t1, $t0, $t0    #y = x * x
         
-        #printf("%d\n)
+        b	main__else_end
+
+main__else:
+        mul	$t1, $t0, $t0       #   y = x * x
+
+        # print(%d)
         li	$v0, 1
         move	$a0, $t1
         syscall
 
+        # print(\n)
         li	$v0, 11
         li	$a0, '\n'
         syscall
 
-
 main__else_end:
-        li	$v0, 0
-        jr	$ra
+        li	$v0, 0          # return value goes in v0
+        jr	$ra              # return
+
 	.data
-# global variables and string literals go here.
-enter_a_num:
+# where global variables and string literals go.
+
+enter:
         .asciiz "Enter a number: "
-square_too_big:
+too_big:
         .asciiz "square too big for 32 bits\n"

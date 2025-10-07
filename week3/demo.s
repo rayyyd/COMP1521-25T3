@@ -1,12 +1,15 @@
 	.text
-lb	$t0, answer
 
-li	$t1, 0
-lb	$t0, s($t1)   // address at answer + 0
 
+la	$t0, x
+la	$t1, ($t0)        #identical statements
+
+la	$t0, cc
+lw	$t1, ($t0)
 
 
 	.data
-
-s:
-	.word 4
+x:
+	.word 54
+cc:
+	.word 3
