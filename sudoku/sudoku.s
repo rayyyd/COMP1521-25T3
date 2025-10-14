@@ -419,6 +419,9 @@ main__epilogue:
 # .TEXT <print_welcome>
 	.text
 print_welcome:
+
+function_name__some_description:
+print_welcome__for_loop_1:
 	# Subset:   0
 	#
 	# Frame:    [...]   <-- FILL THESE OUT!
