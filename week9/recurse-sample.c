@@ -1,54 +1,65 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <dirent.h>
+#include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
-
-void print_directory(char *pathname) {
-    DIR *dirp = opendir(pathname);
+// part 1: print out all files in current directory.
+// part 2: recurse through all subdirectories and print out pathnames.
+void print_current_dir(char *path) {
+    // step 1: open dir
+    DIR *dirp = opendir(path);
     struct dirent *de;
-    while ((de = readdir(dirp)) != NULL) {
-        // printf("%s\n", de->d_name);
-        // skip current & parent dir
-        if (strcmp(de->d_name, ".") == 0 ||  strcmp(de->d_name, "..") == 0) {
-            continue;
-        }
 
-        // piecing together new filename
-        char *new_path = malloc(sizeof(pathname) + sizeof(de->d_name) + 2);
-        new_path[sizeof(pathname) + sizeof(de->d_name) + 1] = '\0';
-        sprintf(new_path, "%s/%s", pathname, de->d_name);
-        
-        // case 1: a directory
-        // use stat to check if directory
+    // step 2: loop through direcotry
+    while ((de = readdir(dirp)) != NULL) {  //read dir
+        // step 3: compile path for each file.
+        char new_path[1024];
+        sprintf(new_path, "%s/%s", path, de->d_name);
+
+        // step 4: determine if directory or not a directory.
         struct stat s;
         stat(new_path, &s);
-        // // recurse into print_directory on the new dir.
+        // step 5: recurse if not "." or ".."
         if (S_ISDIR(s.st_mode)) {
-            print_directory(new_path);
-        }
-
-        // not a directory
-        // just print out the filename.
-        if (strstr(new_path, "hello") != NULL) {
-            printf("%s\n", new_path);
+            if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
+                continue;
+            }
+            // recurse by calling print_current_dir on the next dir
+            print_current_dir(new_path);
+        } else {
+            if (strstr(new_path, "hello")) {
+                printf("%s\n", new_path);
+            }
+            
         }
         
 
 
 
-
+        // not a directory
     }
+    return;
 }
 
+// part 0: get and print out current directory pathname.
 int main() {
-
-    char *env = getenv("PWD");  // current working directory
-    // printf("current path: %s\n", env);
-
-    print_directory(env);
-
-
-    return 0;
+   char *current = getenv("PWD");
+//    printf("%s\n", current);
+   print_current_dir(current);
 }
+
+
+// FILE *f = fopen()
+
+// struct stat s
+// stat(path, &s);
+
+
+
+// DIR *dirp = opendir()
+
+
+// struct dirent *de    <- directory entry.
+// readdir(dirp)
+

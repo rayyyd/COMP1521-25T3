@@ -6,24 +6,48 @@ int utf8_char_length(char byte) {
     if ((byte & 0b10000000) == 0) {
         return 1;
     } else if ((byte & 0b11100000) == 0b11000000) {
+        //       ^         ^             ^
+        //      subject   mask           exp. result
         return 2;
     } else if ((byte & 0b11110000) == 0b11100000) {
         return 3;
-    }
+    } 
     return 4;
 }
 
+// given the above function, solve the question.
 int main(int argc, char *argv[]) {
+    // # characters =/= bytes.
+    // # separate counter for characters and bytes.
 
-    char *string = argv[1];
-    int counter = 0;
-    int i = 0;
-    while (string[i] != '\0') {
-        i += utf8_char_length(string[i]);  //3
-        counter ++;
+    int chars = 0;
+    int bytes = 0;
+    char *str = argv[1]; // input
+    
+    while (str[bytes] != '\0') {
+        bytes += utf8_char_length(str[bytes]);
+        chars += 1;
     }
-
-    printf("THere are %d characters\n", counter);
-
-    return 0;
+    printf("there are %d chars\n", chars);
+    
 }
+
+
+
+
+
+
+
+
+
+
+// 3 byte example
+
+// 1110xxxx 10xxxxxx 10xxxxxx
+
+// 1110 -> 3 bytes long.
+// xxxx -> information
+// 10 -> error checking step. required to be present
+// xxxxxx -> more information
+// 10 -> error checking step for 3rd byte
+// xxxxxx -> more information.
